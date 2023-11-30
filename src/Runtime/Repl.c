@@ -185,7 +185,7 @@ load(char* sopath) {
   fflush(repllog);
   void* h_lib = dlopen(sopath, RTLD_NOW|RTLD_GLOBAL);
   if ( !h_lib ) {
-    fprintf(stderr, "Repl.load.dlopen: Error openening %s: %s", sopath, dlerror());
+    fprintf(stderr, "Repl.load.dlopen: Error opening %s: %s", sopath, dlerror());
     exit(EXIT_FAILURE);
   }
   return h_lib;
@@ -398,7 +398,14 @@ repl_interp(Context ctx) {
       if ( isAbsolute(sofile) ) {
 	load_run(sofile, "main");
       } else {
-	char* sofilepath = safestrcat3(wd, "/", sofile, &buf3, &buf3_sz);
+	char* sofilepath;
+  const char *envpath = "MLKIT_REPL_PATH";
+  char *envdir = getenv(envpath);
+  if (envdir == NULL) {
+    sofilepath = safestrcat3(wd, "/", sofile, &buf3, &buf3_sz);
+  } else {
+    sofilepath = safestrcat3(envdir, "/", sofile, &buf3, &buf3_sz);
+  }
 	load_run(sofilepath, "main");
       }
       if ( uncaught_exn_raised ) {
