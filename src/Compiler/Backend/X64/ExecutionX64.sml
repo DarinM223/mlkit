@@ -424,17 +424,18 @@ structure ExecutionX64: EXECUTION =
     fun mk_sharedlib (ofiles,labs,libs,name,sofile) : unit =
         (* gcc -o sofile -shared -init name -llib1 ... -libn f1.o ... fm.o init.o *)
         let
-          val {dir,file} = OS.Path.splitDirFile name
+          val {dir,file} = OS.Path.splitDirFile sofile
+          val () = print ("mk_sharedlib: dir: " ^ dir ^ "\n")
           val target = CodeGen.generate_repl_link_code ("main",labs)
-          val filename = dir ## mlbdir() ## file
+          val filename = dir ## file
           val filenameo = emit{target=target,filename=filename}
           val libs_str = String.concat (map (fn l => "-l" ^ l ^ " ") libs)
           val ofiles = filenameo::ofiles
           val ofiles_str = String.concat (map (fn l => l ^ " ") ofiles)
           val rpath = if onmac_p() then ""
-                      else " -Wl,-rpath," ^ mlbdir()
+                      else " -Wl,-rpath," ^ dir
           val shell_cmd = link_shared() ^ rpath ^ " -o " ^ sofile ^ " -shared "
-                          ^ ofiles_str ^ " -L " ^ mlbdir() ^ " " ^ libs_str
+                          ^ ofiles_str ^ " -L " ^ dir ^ " " ^ libs_str
         in execute_command shell_cmd;
            message(fn () => "[wrote " ^ sofile ^ "]\n")
         end
