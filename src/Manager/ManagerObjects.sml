@@ -66,7 +66,7 @@ functor ManagerObjects(
 
     val repl_env_var = "MLKIT_REPL_PATH"
     fun repldir () =
-      case OS.Process.getEnv "MLKIT_REPL_PATH" of
+      case OS.Process.getEnv repl_env_var of
         SOME path => path
       | NONE => ""
 
