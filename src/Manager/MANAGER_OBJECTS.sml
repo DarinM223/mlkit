@@ -61,6 +61,8 @@ signature MANAGER_OBJECTS =
 
     val mlbdir : unit -> string (* based on flags, returns a relative path to a directory
 				 * in which to store object code. *)
+    val repl_env_var : string (* environment variable for repl library file path *)
+    val repldir : unit -> string (* returns the path to the repl library files *)
 
     val mk_repl_runtime : (unit -> string) option
 

@@ -64,6 +64,12 @@ functor ManagerObjects(
 
     val mlbdir = Execution.mlbdir
 
+    val repl_env_var = "MLKIT_REPL_PATH"
+    fun repldir () =
+      case OS.Process.getEnv "MLKIT_REPL_PATH" of
+        SOME path => path
+      | NONE => ""
+
     type linkinfo = Execution.linkinfo
     structure SystemTools =
       struct
@@ -405,19 +411,16 @@ functor ManagerObjects(
         case Execution.generate_repl_init_code of
             SOME f =>
             SOME (fn () =>
-                     let val path =
-                           case OS.Process.getEnv "MLKIT_REPL_PATH" of
-                             SOME path => path
-                           | NONE => ""
-                         val exe = path ## mlbdir() ## "runtime.exe"
+                     let val path = repldir() ## mlbdir()
+                         val exe = path ## "runtime.exe"
                      in if OS.FileSys.access (exe, [OS.FileSys.A_EXEC])
                         then ( pr_debug_linking ("[reusing runtime system " ^ exe ^ "]\n")
                              ; exe )
                         else let val t = f()
-                                 val link_file_base = path ## mlbdir() ## "repl-link"
+                                 val link_file_base = path ## "repl-link"
                                  val () = SystemTools.maybe_create_mlbdir {prepath=""}
                                  val link_file_object = Execution.emit{target=t,filename=link_file_base}
-                                 val exe = Execution.create_repl_runtime [link_file_object] (path ## mlbdir())
+                                 val exe = Execution.create_repl_runtime [link_file_object] path
                              in pr_debug_linking ("[created runtime system " ^ exe ^ "]\n")
                               ; exe
                              end
