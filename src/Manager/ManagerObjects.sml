@@ -418,7 +418,7 @@ functor ManagerObjects(
                              ; exe )
                         else let val t = f()
                                  val link_file_base = path ## "repl-link"
-                                 val () = SystemTools.maybe_create_mlbdir {prepath=""}
+                                 val () = SystemTools.maybe_create_mlbdir {prepath=repldir()}
                                  val link_file_object = Execution.emit{target=t,filename=link_file_base}
                                  val exe = Execution.create_repl_runtime [link_file_object] path
                              in pr_debug_linking ("[created runtime system " ^ exe ^ "]\n")
