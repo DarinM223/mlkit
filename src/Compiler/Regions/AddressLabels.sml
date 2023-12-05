@@ -10,6 +10,8 @@ structure AddressLabels :> ADDRESS_LABELS where type name = Name.name =
 
     type name = Name.name
     type label = name * string
+    val showLabel = fn (t0, t1) =>
+      "(" ^ String.concatWith ", " [Name.showName t0, "\"" ^ t1 ^ "\""] ^ ")"
 
     fun new () = (Name.new (),"Lab")
     fun new_named name = (Name.new (), name)

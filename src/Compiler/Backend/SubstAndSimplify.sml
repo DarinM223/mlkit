@@ -20,6 +20,7 @@ struct
   structure PP = PrettyPrint
   structure Labels = AddressLabels
   structure RegvarFinMap = EffVarEnv
+  val showLabel = AddressLabels.showLabel
   val _ = Flags.add_bool_entry
     {long="print_simplified_program", short=NONE, item=ref false,
      menu=["Printing of intermediate forms", "print simplified program (LineStmt)"], neg=false,

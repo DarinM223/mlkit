@@ -26,8 +26,18 @@ structure Name :> NAME =
 
     (* The string is the base *)
     type name0 = {key: int*string, rigid: bool, gen_mark: bool ref}
+    val showName0 = fn {key = (t0, t1), rigid = t2, gen_mark = ref t3} =>
+      "{"
+      ^
+      String.concatWith ", "
+        [ "key = "
+          ^ "(" ^ String.concatWith ", " [Int.toString t0, "\"" ^ t1 ^ "\""] ^ ")"
+        , "rigid = " ^ Bool.toString t2
+        , "gen_mark = " ^ "ref " ^ Bool.toString t3
+        ] ^ "}"
 
     type name = name0 ref
+    val showName = fn (ref t0) => "ref " ^ showName0 t0
 
     fun key (ref {key=k,...} : name) = k
 

@@ -10,6 +10,8 @@ signature ADDRESS_LABELS =
 
     type label
 
+    val showLabel : label -> string
+
     val new       : unit -> label
     val new_named : string -> label
     val eq        : label * label -> bool

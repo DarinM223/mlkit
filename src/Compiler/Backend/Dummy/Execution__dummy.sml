@@ -44,6 +44,8 @@ functor ExecutionDummy(ExecutionArgs : EXECUTION_ARGS) : EXECUTION =
     type linkinfo = unit
     type target = unit
 
+    val showLinkinfo = fn () => "()"
+
     val code_label_of_linkinfo : linkinfo -> label = fn _ => Labels.new()
     val imports_of_linkinfo : linkinfo -> (label list * label list) = fn _ => (nil,nil)
     val exports_of_linkinfo : linkinfo -> (label list * label list) = fn _ => (nil,nil)
@@ -51,7 +53,7 @@ functor ExecutionDummy(ExecutionArgs : EXECUTION_ARGS) : EXECUTION =
 
     (* Hook to be run before any compilation *)
     val preHook = fn _ => ()
-	
+
     (* Hook to be run after all compilations (for one compilation unit) *)
     val postHook = fn _ => ()
 

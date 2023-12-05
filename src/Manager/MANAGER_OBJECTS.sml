@@ -6,6 +6,7 @@ signature MANAGER_OBJECTS =
     type target
     type linkinfo
 
+    val showModcode : modcode -> string
     val backend_name : string (* native or kam *)
 
     exception PARSE_ELAB_ERROR of ParseElab.ErrorCode.ErrorCode list

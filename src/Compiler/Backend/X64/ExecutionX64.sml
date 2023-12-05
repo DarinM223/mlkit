@@ -210,6 +210,32 @@ structure ExecutionX64: EXECUTION =
 
     type linkinfo = {code_label:lab, imports: lab list * lab list,
                      exports : lab list * lab list, unsafe:bool}
+
+    val showLab = NativeCompile.showLabel
+    val showLinkinfo =
+      fn {code_label = t0, imports = (t1, t2), exports = (t3, t4), unsafe = t5} =>
+        "{"
+        ^
+        String.concatWith ", "
+          [ "code_label = " ^ showLab t0
+          , "imports = "
+            ^
+            "("
+            ^
+            String.concatWith ", "
+              [ "[" ^ String.concatWith ", " (List.map showLab t1) ^ "]"
+              , "[" ^ String.concatWith ", " (List.map showLab t2) ^ "]"
+              ] ^ ")"
+          , "exports = "
+            ^
+            "("
+            ^
+            String.concatWith ", "
+              [ "[" ^ String.concatWith ", " (List.map showLab t3) ^ "]"
+              , "[" ^ String.concatWith ", " (List.map showLab t4) ^ "]"
+              ] ^ ")"
+          , "unsafe = " ^ Bool.toString t5
+          ] ^ "}"
     fun code_label_of_linkinfo (li:linkinfo) = #code_label li
     fun exports_of_linkinfo (li:linkinfo) = #exports li
     fun imports_of_linkinfo (li:linkinfo) = #imports li

@@ -4,6 +4,8 @@ signature NAME =
 
     type name
 
+    val showName : name -> string
+
     (* A name is either flexible or rigid. A flexible name, n, may be
      * matched against another name, n0, which may be either flexible
      * or rigid, and if n0 is marked generative, then n0 and n will

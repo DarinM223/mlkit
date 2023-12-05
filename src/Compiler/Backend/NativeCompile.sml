@@ -35,6 +35,7 @@ signature NATIVE_COMPILE =
     type StoreTypeCO
     type Aty
 
+    val showLabel : label -> string
 
     val compile : BackendEnv * ((place*pp)at,place*phsize,unit) LambdaPgm * bool * string(*vcg_file*) ->
       BackendEnv * {main_lab:label,
@@ -100,6 +101,8 @@ functor NativeCompile (structure BackendInfo : BACKEND_INFO
     type offset = SubstAndSimplify.offset
     type StoreTypeCO = SubstAndSimplify.StoreTypeCO
     type Aty = SubstAndSimplify.Aty
+
+    val showLabel = SubstAndSimplify.showLabel
 
     val gc_p = Flags.is_on0 "garbage_collection"
     val print_region_flow_graph = Flags.is_on0 "print_region_flow_graph"

@@ -24,6 +24,9 @@ structure ExecutionBarry : EXECUTION =
     type linkinfo = {unsafe:bool}
     type target = Compile.target
 
+    val showLinkinfo = fn {unsafe = t0} =>
+      "{" ^ String.concatWith ", " ["unsafe = " ^ Bool.toString t0] ^ "}"
+
     val pr_lab = Labels.pr_label
     val dummy_label = Labels.new()
     val code_label_of_linkinfo : linkinfo -> lab = fn _ => dummy_label

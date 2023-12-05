@@ -20,6 +20,8 @@ signature SUBST_AND_SIMPLIFY =
     type AtomCO
     type offset = int
 
+    val showLabel : label -> string
+
     datatype Aty =
         REG_I_ATY        of offset
       | REG_F_ATY        of offset

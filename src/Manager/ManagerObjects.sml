@@ -256,6 +256,8 @@ functor ManagerObjects(
         fun mk_sharedlib (tfiles_with_linkinfos, libs, name, sofile) : unit =
             let val linkinfos = map (fn (a,b) => b) tfiles_with_linkinfos
 	        val ofiles = map #1 tfiles_with_linkinfos
+			val () = print ("OFiles:\n)")
+			val () = List.app (fn s => print ("OFile: " ^ s ^ "\n")) ofiles
 	        val labs = map Execution.code_label_of_linkinfo linkinfos
             in Execution.mk_sharedlib(ofiles,labs,libs,name,sofile)
             end
@@ -266,6 +268,30 @@ functor ManagerObjects(
                      | SEQ_MODC of modcode * modcode
                      | EMITTED_MODC of filename * linkinfo
                      | NOTEMITTED_MODC of target * linkinfo * filename
+
+    local
+      val showLinkinfo = Execution.showLinkinfo
+      val showTarget = fn _ => "target"
+      val showFilename = fn t0 => "\"" ^ t0 ^ "\""
+      val rec modcode = fn modcode_0 =>
+        fn EMPTY_MODC => "EMPTY_MODC"
+         | SEQ_MODC (t0, t1) =>
+          "SEQ_MODC " ^ "(" ^ String.concatWith ", " [modcode_0 t0, modcode_0 t1]
+          ^ ")"
+         | EMITTED_MODC (t2, t3) =>
+          "EMITTED_MODC "
+          ^ "(" ^ String.concatWith ", " [showFilename t2, showLinkinfo t3] ^ ")"
+         | NOTEMITTED_MODC (t4, t5, t6) =>
+          "NOTEMITTED_MODC "
+          ^
+          "("
+          ^ String.concatWith ", " [showTarget t4, showLinkinfo t5, showFilename t6]
+          ^ ")"
+      val modcode = fn () => let val rec modcode_0 = fn ? => modcode modcode_0 ?
+                             in modcode_0
+                             end
+    in val showModcode = modcode ()
+    end
 
     structure ModCode =
       struct

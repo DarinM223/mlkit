@@ -18,6 +18,8 @@ signature EXECUTION =
     type target
     type linkinfo
 
+    val showLinkinfo : linkinfo -> string
+
     val pr_lab                 : lab -> string
     val code_label_of_linkinfo : linkinfo -> lab
     val imports_of_linkinfo    : linkinfo -> lab list * lab list
