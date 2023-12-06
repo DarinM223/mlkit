@@ -125,6 +125,8 @@ functor ManagerObjects(
 		       end
 		   else
 		       let val {dir,file} = OS.Path.splitDirFile filename
+			   val () = print("SystemTools.emit filename: " ^ filename ^ "\n")
+			   val () = print("SystemTools.emit dir: " ^ dir ^ "\n")
 			   val target_filename = OS.Path.base(OS.Path.file absprjid) ^ "-" ^ file
 			   val target_filename = mlbdir() ## target_filename
 			   val _ = maybe_create_mlbdir {prepath=dir}

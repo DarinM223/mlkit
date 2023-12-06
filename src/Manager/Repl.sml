@@ -498,7 +498,8 @@ local
   fun print_flags () = print_search ""
 
   fun load stepno (rp:rp) libs_acc deps mlbfilepath =
-      let val () = Manager.comp mlbfilepath
+      let val () = print ("Mlbfilepath: " ^ mlbfilepath ^ "\n")
+          val () = Manager.comp mlbfilepath
           (* Now, we create a new sofile that links the runtime and all the object files found in
            * the modcode for the compiled mlbfile - later we can keep track of already
            * linked objects, but for now, we just assume that the mlb-file does not import other

@@ -336,6 +336,7 @@ struct
                                           )
 
           val _ = vchat ("Updating dependencies...\n")
+          val _ = print("MlbMake.build: mlbdir: " ^ P.mlbdir() ^ "\n")
           val _ = maybe_create_mlbdir()
           val _ = MlbProject.depDir := P.mlbdir()
           val _ = MlbProject.dep mlbfile
