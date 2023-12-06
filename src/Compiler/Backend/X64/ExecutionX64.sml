@@ -425,7 +425,6 @@ structure ExecutionX64: EXECUTION =
         (* gcc -o sofile -shared -init name -llib1 ... -libn f1.o ... fm.o init.o *)
         let
           val {dir,file} = OS.Path.splitDirFile sofile
-          val () = print ("mk_sharedlib: dir: " ^ dir ^ "\n")
           val target = CodeGen.generate_repl_link_code ("main",labs)
           val filename = dir ## file
           val filenameo = emit{target=target,filename=filename}

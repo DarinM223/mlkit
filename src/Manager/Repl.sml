@@ -323,7 +323,6 @@ datatype dep = SMLdep of string | MLBdep of string * string list
 fun depToEb p =
     let val {dir,file} = OS.Path.splitDirFile p
         val dir = dir ## MO.mlbdir()
-        val () = print ("depToEb: " ^ dir ^ "\n")
     in dir ## file ^ ".o.eb"
     end
 
@@ -335,7 +334,6 @@ fun depToEb p =
 fun mlbfileToDfFile p =
     let val {dir,file} = OS.Path.splitDirFile p
         val dir' = dir ## MO.mlbdir()
-        val () = print ("mlbfileToDfFile: " ^ dir' ^ "\n")
     in (dir, dir' ## file ^ ".df")
     end
 
@@ -346,7 +344,6 @@ fun mlbfileToDfFile p =
 fun mlbfileToSoFile p =
     let val {dir,file} = OS.Path.splitDirFile p
         val dir' = dir ## MO.mlbdir()
-        val () = print ("mlbfileToSoFile: " ^ dir' ^ "\n")
     in (dir, dir' ## file ^ ".so")
     end
 
@@ -364,7 +361,6 @@ fun files_deps deps =
           case OS.Process.getEnv MO.repl_env_var of
             SOME path => path
           | NONE => cwd
-        val () = print ("files_deps dir: " ^ dir ^ "\n")
         fun isin N y = List.exists (fn x => y = x) N
         fun trim (N:string list) nil acc = acc
           | trim N (x::xs) acc =
@@ -511,7 +507,6 @@ local
 
           val punit = "stdin-" ^ #sessionid rp ^ "-" ^ Int.toString stepno
           val sofile = MO.repldir() ## MO.mlbdir() ## ("lib" ^ punit ^ ".so")
-          val () = print ("reading stdin SO file from SML: " ^ sofile ^ "\n")
           (* create a so-file with initialisation code as we do for sml-files *)
           val () = ModCode.mk_sharedlib (modc, ["runtime"], punit, sofile)
           (* memo: filter out those o-files that have already been loaded *)
@@ -621,16 +616,11 @@ fun process_cmd rt_exe stepno state (rp:rp) (cmd:string) libs_acc deps =
       val repl_logfile = MO.mlbdir() ## "repl-" ^ sessionid ^ ".log"
       val () = Posix.FileSys.mkfifo (MO.repldir() ## command_pipe_name, Posix.FileSys.S.irwxu)
       val () = Posix.FileSys.mkfifo (MO.repldir() ## reply_pipe_name, Posix.FileSys.S.irwxu)
-      val () = print ("Runtime exe path: " ^ rt_exe ^ "\n")
       val childpid =
           case Posix.Process.fork() of
               SOME pid => pid
             | NONE =>
               ( OS.FileSys.chDir (MO.repldir()) handle _ => ()
-              ; print ("Changing directory to: " ^ (MO.repldir()) ^ "\n")
-              ; print ("Command pipe name: " ^ command_pipe_name ^ "\n")
-              ; print ("Reply pipe name: " ^ reply_pipe_name ^ "\n")
-              ; print ("Logfile name: " ^ repl_logfile ^ "\n")
               ; Posix.Process.execp (rt_exe, [OS.Path.file rt_exe,
                                               "-command_pipe", command_pipe_name,
                                               "-reply_pipe", reply_pipe_name,
@@ -771,7 +761,6 @@ fun repl (rt_exe, stepno, state, rp:rp, libs_acc, deps:dep list) : OS.Process.st
                val dir = MO.repldir() ## MO.mlbdir()
                val modc = ModCode.dirMod dir modc
                val sofile = dir ## ("lib" ^ smlfile ^ ".so")
-               val () = print ("making stdin SO file from SML: " ^ sofile ^ "\n")
                val () = ModCode.mk_sharedlib (modc, libs_acc, smlfile, sofile)
 
                (* Write closed export bases to disk if identical export bases are

@@ -396,21 +396,19 @@ repl_interp(Context ctx) {
     } else if ( strcmp(cmd, "LOADRUN") == 0 ) {
       char* sofile = read_str(command_fd, &buf2, &buf2_sz);
       if ( isAbsolute(sofile) ) {
-          fprintf(stderr, "Absolute file path: %s\n", sofile);
 	load_run(sofile, "main");
       } else {
 	char* sofilepath;
   const char *envpath = "MLKIT_REPL_PATH";
   char *envdir = getenv(envpath);
-  fprintf(stderr, "Envdir is %s\n", envdir);
   if (envdir == NULL) {
-    fprintf(stderr, "Using working directory\n");
+    fprintf(repllog, "{using working directory}\n");
+    fflush(repllog);
     sofilepath = safestrcat3(wd, "/", sofile, &buf3, &buf3_sz);
-    fprintf(stderr, "So file path: %s\n", sofilepath);
   } else {
-    fprintf(stderr, "Using env directory\n");
+    fprintf(repllog, "{using env directory %s}\n", envdir);
+    fflush(repllog);
     sofilepath = safestrcat3(envdir, "/", sofile, &buf3, &buf3_sz);
-    fprintf(stderr, "So file path: %s\n", sofilepath);
   }
 	load_run(sofilepath, "main");
       }
