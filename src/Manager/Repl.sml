@@ -751,8 +751,6 @@ fun repl (rt_exe, stepno, state, rp:rp, libs_acc, deps:dep list) : OS.Process.st
                val functor_inline = true
                val smlfile' = MO.repldir() ## smlfile
                val (intB', modc) = IM.interp(functor_inline, absprjid, intB_im, topdec', smlfile')
-               val () = print ("Modc: ")
-               val () = print (MO.showModcode modc ^ "\n")
                val names_int = !Name.bucket
                val _ = List.app Name.mk_rigid names_int
                val _ = Name.bucket := []
@@ -770,7 +768,12 @@ fun repl (rt_exe, stepno, state, rp:rp, libs_acc, deps:dep list) : OS.Process.st
 
                (* create a shared library *)
                val modc = ModCode.emit (absprjid,modc)
+               val () = print ("After emitted Modc: ")
+               val () = print (MO.showModcode modc ^ "\n")
                val dir = MO.repldir() ## MO.mlbdir()
+               val modc = ModCode.dirMod dir modc
+               val () = print ("After modified Modc: ")
+               val () = print (MO.showModcode modc ^ "\n")
                val sofile = dir ## ("lib" ^ smlfile ^ ".so")
                val () = print ("making stdin SO file from SML: " ^ sofile ^ "\n")
                val () = ModCode.mk_sharedlib (modc, libs_acc, smlfile, sofile)
